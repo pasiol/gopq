@@ -83,7 +83,7 @@ func safeDelete(filename string) error {
 
 	if err != nil {
 		if Debug {
-			log.Printf("system failure, cannot open file %s: %s", filename, err)
+			log.Printf("cannot open file %s: %s", filename, err)
 		}
 		return err
 	}
@@ -91,7 +91,7 @@ func safeDelete(filename string) error {
 
 	fileInfo, err := file.Stat()
 	if err != nil {
-		log.Fatalf("system failure, cannot read file: %s", filename)
+		log.Fatalf("cannot read file: %s", filename)
 		return err
 	}
 
@@ -102,20 +102,20 @@ func safeDelete(filename string) error {
 		copy(zeroBytes[:], strconv.Itoa(i))
 		_, err := file.Write([]byte(zeroBytes))
 		if err != nil {
-			log.Fatalf("system failure, cannot write on file: %s", filename)
+			log.Fatalf("cannot write on file: %s", filename)
 			return err
 		}
 	}
 
 	err = file.Close()
 	if err != nil {
-		log.Fatalf("system failure, cannot close file: %s", filename)
+		log.Fatalf("cannot close file: %s", filename)
 		return err
 	}
 
 	err = os.Remove(filename)
 	if err != nil {
-		log.Fatalf("system failure, cannot remove file: %s", filename)
+		log.Fatalf("cannot remove file: %s", filename)
 		return err
 	}
 
