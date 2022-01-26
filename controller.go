@@ -80,7 +80,6 @@ func fileExists(filename string) bool {
 
 func safeDelete(filename string) error {
 	file, err := os.OpenFile(filename, os.O_RDWR, 0666)
-	defer file.Close()
 
 	if err != nil {
 		if Debug {
@@ -88,6 +87,7 @@ func safeDelete(filename string) error {
 		}
 		return err
 	}
+	defer file.Close()
 
 	fileInfo, err := file.Stat()
 	if err != nil {
@@ -222,16 +222,17 @@ func UpdatePQ(host string) error {
 		}
 		if err != nil {
 			if Debug {
-				log.Printf("pq update fails: %s", err)
+				log.Printf("PQ update fails: %s", err)
 			}
 			return err
 		}
 		if Debug {
 			log.Printf("update output: %s", out)
 		}
-	}
-	if Debug {
-		log.Print("pq already updated")
+	} else {
+		if Debug {
+			log.Print("PQ already updated")
+		}
 	}
 	return nil
 }
@@ -286,6 +287,12 @@ func ExecuteAtomicImportQuery(filename string, primusHost, primusPort, userName 
 }
 
 func ExecuteAndRead(query PrimusQuery, timeout int) (string, error) {
+	if !Updated {
+		err := UpdatePQ(query.Host)
+		if err != nil {
+			return "", err
+		}
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 	defer cancel()
 	query.Output = ""
