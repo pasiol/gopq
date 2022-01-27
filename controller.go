@@ -20,7 +20,6 @@ const charset = "abcdefghijklmnopqrstuvwxyz" +
 var (
 	seededRand *rand.Rand = rand.New(
 		rand.NewSource(time.Now().UnixNano()))
-	Updated         = false
 	Debug           = false
 	PrimusQueryPath = "./primusquery"
 )
@@ -212,28 +211,23 @@ func NewCardID(output string) (int, error) {
 }
 
 func UpdatePQ(host string, port string) error {
-	if !Updated {
-		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-		defer cancel()
-		cmd := exec.CommandContext(ctx, PrimusQueryPath, host, port, "-update")
-		out, err := cmd.Output()
-		if ctx.Err() == context.DeadlineExceeded {
-			return errors.New("primusquery update timeout")
-		}
-		if err != nil {
-			if Debug {
-				log.Printf("PQ update fails: %s", err)
-			}
-			return err
-		}
-		if Debug {
-			log.Printf("update output: %s", out)
-		}
-	} else {
-		if Debug {
-			log.Print("PQ already updated")
-		}
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, PrimusQueryPath, host, port, "-update")
+	out, err := cmd.Output()
+	if ctx.Err() == context.DeadlineExceeded {
+		return errors.New("primusquery update timeout")
 	}
+	if err != nil {
+		if Debug {
+			log.Printf("PQ update fails: %s", err)
+		}
+		return err
+	}
+	if Debug {
+		log.Printf("update output: %s", out)
+	}
+
 	return nil
 }
 
