@@ -281,12 +281,7 @@ func ExecuteAtomicImportQuery(filename string, primusHost, primusPort, userName 
 }
 
 func ExecuteAndRead(query PrimusQuery, timeout int) (string, error) {
-	if !Updated {
-		err := UpdatePQ(query.Host, query.Port)
-		if err != nil {
-			return "", err
-		}
-	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 	defer cancel()
 	query.Output = ""
