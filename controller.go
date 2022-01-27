@@ -102,7 +102,7 @@ func safeDelete(filename string) error {
 		copy(zeroBytes[:], strconv.Itoa(i))
 		_, err := file.Write([]byte(zeroBytes))
 		if err != nil {
-			log.Fatalf("cannot write on file: %s", filename)
+			log.Printf("cannot write on file: %s", filename)
 			return err
 		}
 	}
@@ -211,11 +211,11 @@ func NewCardID(output string) (int, error) {
 	return -1, nil
 }
 
-func UpdatePQ(host string) error {
+func UpdatePQ(host string, port string) error {
 	if !Updated {
 		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
-		cmd := exec.CommandContext(ctx, PrimusQueryPath, host, "-update")
+		cmd := exec.CommandContext(ctx, PrimusQueryPath, host, port, "-update")
 		out, err := cmd.Output()
 		if ctx.Err() == context.DeadlineExceeded {
 			return errors.New("primusquery update timeout")
@@ -288,7 +288,7 @@ func ExecuteAtomicImportQuery(filename string, primusHost, primusPort, userName 
 
 func ExecuteAndRead(query PrimusQuery, timeout int) (string, error) {
 	if !Updated {
-		err := UpdatePQ(query.Host)
+		err := UpdatePQ(query.Host, query.Port)
 		if err != nil {
 			return "", err
 		}
