@@ -77,7 +77,7 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-func safeDelete(filename string) error {
+func SafeDelete(filename string) error {
 	file, err := os.OpenFile(filename, os.O_RDWR, 0666)
 
 	if err != nil {
@@ -163,7 +163,7 @@ func RepairPrimusGeneratedJSON(f string) error {
 
 	jsonAsString := string(jsonAsBytes)
 	if strings.Contains(jsonAsString, ",") {
-		err := safeDelete(f)
+		err := SafeDelete(f)
 		if err != nil {
 			return err
 		}
@@ -238,13 +238,13 @@ func ExecuteImportQuery(filename string, primusHost, primusPort, userName string
 			if Debug {
 				log.Printf("import query %s failed: %s", loaderName, err)
 			} else {
-				_ = safeDelete(filename)
+				_ = SafeDelete(filename)
 			}
 			return "", err
 		} else if len(output) > 0 && Debug {
 			log.Printf("import query %s output: %s", loaderName, output)
 		}
-		_ = safeDelete(filename)
+		_ = SafeDelete(filename)
 		return string(output), err
 	} else {
 		if Debug {
@@ -302,11 +302,11 @@ func ExecuteAndRead(query PrimusQuery, timeout int) (string, error) {
 		if Debug {
 			log.Printf("primus connection timeout: %s", err)
 		}
-		safeDelete(queryFilename)
+		SafeDelete(queryFilename)
 		return "", err
 	}
 
-	err = safeDelete(queryFilename)
+	err = SafeDelete(queryFilename)
 	if err != nil {
 		return string(out), err
 	}
@@ -336,11 +336,11 @@ func Execute(query PrimusQuery, timeout int) error {
 		if Debug {
 			log.Printf("primus connection timeout: %s", err)
 		}
-		safeDelete(queryFilename)
+		SafeDelete(queryFilename)
 		return err
 	}
 
-	err = safeDelete(queryFilename)
+	err = SafeDelete(queryFilename)
 	if err != nil {
 		return err
 	}
