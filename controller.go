@@ -232,7 +232,7 @@ func UpdatePQ(host string, port string) error {
 }
 
 func ExecuteImportQuery(filename string, primusHost, primusPort, userName string, password string, loaderName string) (string, error) {
-	if fileExists(filename) {
+	if FileExists(filename) {
 		output, err := exec.Command(PrimusQueryPath, primusHost, primusPort, userName, password, loaderName, "-i", filename).Output()
 		if err != nil {
 			if Debug {
