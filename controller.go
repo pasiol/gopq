@@ -69,7 +69,7 @@ func createTMPFile(filename string, content string) (string, error) {
 	return tmpfile.Name(), nil
 }
 
-func fileExists(filename string) bool {
+func FileExists(filename string) bool {
 	info, err := os.Stat(filename)
 	if os.IsNotExist(err) {
 		return false
