@@ -1,3 +1,3 @@
-module github.com/pasiol/gopq
+module gopq
 
 go 1.16

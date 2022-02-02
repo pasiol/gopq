@@ -24,7 +24,7 @@ var (
 	PrimusQueryPath = "./primusquery"
 )
 
-func stringWithCharset(length int) string {
+func StringWithCharset(length int) string {
 	b := make([]byte, length)
 	for i := range b {
 		b[i] = charset[seededRand.Intn(len(charset))]
