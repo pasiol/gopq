@@ -287,7 +287,7 @@ func ExecuteAndRead(query PrimusQuery, timeout int) (string, error) {
 	query.Output = ""
 	queryText := SetQuery(query)
 
-	queryFilename := stringWithCharset(128)
+	queryFilename := StringWithCharset(128)
 	queryFilename, err := createTMPFile(queryFilename, queryText)
 	if err != nil {
 		return "", err
@@ -321,7 +321,7 @@ func Execute(query PrimusQuery, timeout int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 	defer cancel()
 	queryText := SetQuery(query)
-	queryFilename := stringWithCharset(128)
+	queryFilename := StringWithCharset(128)
 	queryFilename, err := createTMPFile(queryFilename, queryText)
 	if err != nil {
 		return err
