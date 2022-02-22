@@ -43,7 +43,7 @@ func createFile(filename string, content string) error {
 	return nil
 }
 
-func createTMPFile(filename string, content string) (string, error) {
+func CreateTMPFile(filename string, content string) (string, error) {
 	tmpfile, err := ioutil.TempFile("", filename)
 	if err != nil {
 		if Debug {
@@ -288,7 +288,7 @@ func ExecuteAndRead(query PrimusQuery, timeout int) (string, error) {
 	queryText := SetQuery(query)
 
 	queryFilename := StringWithCharset(128)
-	queryFilename, err := createTMPFile(queryFilename, queryText)
+	queryFilename, err := CreateTMPFile(queryFilename, queryText)
 	if err != nil {
 		return "", err
 	}
@@ -322,7 +322,7 @@ func Execute(query PrimusQuery, timeout int) error {
 	defer cancel()
 	queryText := SetQuery(query)
 	queryFilename := StringWithCharset(128)
-	queryFilename, err := createTMPFile(queryFilename, queryText)
+	queryFilename, err := CreateTMPFile(queryFilename, queryText)
 	if err != nil {
 		return err
 	}
